@@ -31,15 +31,19 @@ dotnet run --project src/WeatherReport -- path/to/cities.txt
 Уникальных городов: 8
 
 Погода по городам:
-  Moscow, Russia +8 °C
-  Khabarovsk, Russia -2 °C
-  ...
-  NhaTrang, Vietnam +27 °C
+  Moscow, Russia +13 °C
+  Khabarovsk, Russia +8 °C
+  Saint-Petersburg, Russia +14 °C
+  Vienna, Austria +24 °C
+  Izhevsk, Russia +5 °C
+  Perm, Russia +4 °C
+  NhaTrang, Vietnam +26 °C
+  Villach, Austria +16 °C
 
 По странам:
-  Austria — 2 cities, avg: +11 °C, min: +10 °C, max: +12 °C
-  Russia — 5 cities, avg: +4.4 °C, min: -2 °C, max: +8 °C
-  Vietnam — 1 city, avg: +27 °C, min: +27 °C, max: +27 °C
+  Austria — 2 cities, avg: +20 °C, min: +16 °C, max: +24 °C
+  Russia — 5 cities, avg: +8.8 °C, min: +4 °C, max: +14 °C
+  Vietnam — 1 city, avg: +26 °C, min: +26 °C, max: +26 °C
 ```
 
 ## Как это устроено
@@ -56,8 +60,9 @@ dotnet run --project src/WeatherReport -- path/to/cities.txt
 
 - `current_condition[0].temp_C` — текущая температура;
 - `nearest_area[0].country[0].value` — страна;
-- `nearest_area[0].areaName[0].value` — какой пункт нашёл wttr.in. Если он не совпадает с запросом,
-  это показывается в выводе, например `(wttr.in: Nha Trang)`, — так видно ошибки геокодинга.
+- `nearest_area[0].areaName[0].value` — какой пункт нашёл wttr.in. Если это другой город (в латинице),
+  он показывается в выводе, например `(wttr.in: Permes)`, — так видно ошибки геокодинга.
+  Названия кириллицей (wttr.in отдаёт российские города как «Москва») считаются переводом и не помечаются.
 
 Ошибка по одному городу (нет сети, город не найден) не прерывает программу: город выводится с ошибкой,
 статистика считается по остальным.

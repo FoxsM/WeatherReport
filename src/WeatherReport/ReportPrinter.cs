@@ -32,8 +32,12 @@ public static class ReportPrinter
     {
         var line = $"{d.City}, {d.Country} {FormatTemp(d.TemperatureC)}";
         // Если wttr.in сопоставил запросу другой пункт — показываем, чтобы ошибку геокодинга было видно.
-        var norm = (string s) => new string(s.Where(char.IsLetter).ToArray());
-        if (d.ResolvedArea.Length > 0 && !norm(d.ResolvedArea).Equals(norm(d.City), StringComparison.OrdinalIgnoreCase))
+        // Названия не латиницей (wttr.in отдаёт российские города кириллицей: «Москва») не сравниваем —
+        // это перевод, а не другой город.
+        static string Norm(string s) => new(s.Where(char.IsLetter).ToArray());
+        static bool IsLatin(string s) => s.Where(char.IsLetter).All(c => c < 0x250);
+        if (d.ResolvedArea.Length > 0 && IsLatin(d.ResolvedArea) &&
+            !Norm(d.ResolvedArea).Equals(Norm(d.City), StringComparison.OrdinalIgnoreCase))
             line += $"  (wttr.in: {d.ResolvedArea})";
         return line;
     }
